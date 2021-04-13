@@ -41,10 +41,12 @@ class Telemetry extends events.EventEmitter {
     return new Promise<void>((resolve, reject)=>{
       this.connection = new WebSocket(this.url);
       this.connection.on('open', () => {
-        this.connection!.send('subscribe:Kusama');
-        setTimeout(()=> {
-          this.isStarting = false;
-        }, 10000);
+        setTimeout(() => {
+          this.connection!.send('subscribe:Kusama');
+        }, 2000);
+        setTimeout(() => {
+            this.isStarting = false;
+        }, 12000);
         setInterval(()=>{
           this.connection!.send('ping:' + this.pingCount++);
         }, 60000);
@@ -61,7 +63,13 @@ class Telemetry extends events.EventEmitter {
 
       this.connection.on('error', (err) => {
         console.error(err);
-        reject(err);
+        this.connection?.terminate();
+        this.emit('error');
+      });
+
+      this.connection.on('close', () => {
+        console.error('websocket connection closed');
+        this.emit('close');
       });
     });
   }

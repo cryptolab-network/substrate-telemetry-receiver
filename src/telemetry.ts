@@ -39,6 +39,7 @@ class Telemetry extends events.EventEmitter {
 
   connect() {
     return new Promise<void>((resolve, reject)=>{
+      this.isStarting = true;
       this.connection = new WebSocket(this.url);
       this.connection.on('open', () => {
         setTimeout(() => {

@@ -1,1 +1,3 @@
-export { Telemetry } from './src/telemetry';
+"use strict";
+const Telemetry = require('./src/telemetry');
+module.exports = Telemetry;

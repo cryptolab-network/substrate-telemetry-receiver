@@ -1,6 +1,11 @@
-export { Telemetry };
-import WebSocket from 'ws';
-import events from 'events';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Telemetry = void 0;
+const ws_1 = __importDefault(require("ws"));
+const events_1 = __importDefault(require("events"));
 class Node {
     constructor(id, name, runtime, address) {
         this.id = id;
@@ -10,7 +15,7 @@ class Node {
         this.isStale = false;
     }
 }
-class Telemetry extends events.EventEmitter {
+class Telemetry extends events_1.default.EventEmitter {
     constructor(url, channel) {
         super();
         this.url = url;
@@ -22,7 +27,7 @@ class Telemetry extends events.EventEmitter {
     }
     connect() {
         return new Promise((resolve, reject) => {
-            this.connection = new WebSocket(this.url);
+            this.connection = new ws_1.default(this.url);
             this.connection.on('open', () => {
                 this.connection.send('subscribe:Kusama');
                 setTimeout(() => {
@@ -118,5 +123,6 @@ class Telemetry extends events.EventEmitter {
         this.removingNodes[nodeId] = timeout;
     }
 }
+exports.Telemetry = Telemetry;
 ;
 module.exports = Telemetry;

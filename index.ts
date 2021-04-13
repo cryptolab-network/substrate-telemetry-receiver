@@ -1,3 +1,4 @@
-import * as events from 'events';
-export { Telemetry } from './src/telemetry'
+const Telemetry = require('./src/telemetry');
+
+module.exports = Telemetry;
 

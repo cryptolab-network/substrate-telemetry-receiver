@@ -1,0 +1,27 @@
+{
+  "name": "substrate-telemetry-receiver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cryptolab-network/substrate-telemetry-receiver.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cryptolab-network/substrate-telemetry-receiver/issues"
+  },
+  "homepage": "https://github.com/cryptolab-network/substrate-telemetry-receiver#readme",
+  "dependencies": {
+    "ws": "^7.4.4"
+  },
+  "devDependencies": {
+    "@types/ws": "^7.4.1"
+  }
+}

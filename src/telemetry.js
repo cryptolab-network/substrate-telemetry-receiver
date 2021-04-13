@@ -27,6 +27,7 @@ class Telemetry extends events_1.default.EventEmitter {
     }
     connect() {
         return new Promise((resolve, reject) => {
+            this.isStarting = true;
             this.connection = new ws_1.default(this.url);
             this.connection.on('open', () => {
                 setTimeout(() => {

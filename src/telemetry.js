@@ -109,8 +109,6 @@ class Telemetry extends events_1.default.EventEmitter {
                 isStale: false,
             });
             if (!this.isStarting) { // this is a node once offline
-                // TODO: send notification here
-                console.log('TODO: Send Telegram message to inform node ' + name + ' is now online');
                 if (name !== null) {
                     this.emit('node_online', name);
                 }
@@ -122,8 +120,6 @@ class Telemetry extends events_1.default.EventEmitter {
         const timeout = setTimeout(() => {
             const info = Object.assign({}, this.nodes[nodeId]);
             delete this.nodes[nodeId];
-            // TODO: send notification here
-            console.log(`TODO: Send Telegram message to inform node ${info.id}: ${info.name} is now offline`);
             if (info.name !== null) {
                 this.emit('node_offline', info.name);
             }

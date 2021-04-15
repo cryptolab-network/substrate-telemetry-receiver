@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Telemetry = void 0;
 const ws_1 = __importDefault(require("ws"));
 const events_1 = __importDefault(require("events"));
+const winston_1 = require("winston");
+const logger = winston_1.loggers.get('telemetry');
 class Node {
     constructor(id, name, runtime, address) {
         this.id = id;
@@ -50,12 +52,12 @@ class Telemetry extends events_1.default.EventEmitter {
             });
             this.connection.on('error', (err) => {
                 var _a;
-                console.error(err);
+                logger.error(err);
                 (_a = this.connection) === null || _a === void 0 ? void 0 : _a.terminate();
                 this.emit('error');
             });
             this.connection.on('close', () => {
-                console.error('websocket connection closed');
+                logger.error('websocket connection closed');
                 this.emit('close');
             });
         });
@@ -64,23 +66,23 @@ class Telemetry extends events_1.default.EventEmitter {
         const action = message[0];
         switch (action) {
             case 3: // Add Node
-                console.log('added nodes @ ' + new Date().toUTCString());
+                logger.debug('added nodes @ ' + new Date().toUTCString());
                 const addNodes = this.__onAddNode(message[1]);
                 addNodes.forEach((node) => {
                     this.nodes[node.id] = node;
                 });
                 if (addNodes.length > 0) {
-                    console.log(addNodes);
+                    logger.verbose(addNodes);
                 }
                 break;
             case 4: // Remove Node
-                console.log('removed nodes @ ' + new Date().toUTCString());
-                console.log(message[1]);
+                logger.debug('removed nodes @ ' + new Date().toUTCString());
+                logger.verbose(message[1]);
                 this.__onRemoveNode(message[1]);
                 break;
             case 19: // Stale Node
-                console.log('stale nodes @ ' + new Date().toUTCString());
-                console.log(message[1]);
+                logger.debug('stale nodes @ ' + new Date().toUTCString());
+                logger.verbose(message[1]);
                 break;
         }
         return 2;
@@ -94,13 +96,13 @@ class Telemetry extends events_1.default.EventEmitter {
         const address = detail[3];
         const existNode = this.removingNodes[id];
         if (existNode !== undefined) {
-            console.log(`${id} is waiting for removing and is recovered.`);
+            logger.debug(`${id} is waiting for removing and is recovered.`);
             clearTimeout(existNode);
             delete this.removingNodes[id];
             return [];
         }
         else {
-            console.log(`${id} is online`);
+            logger.debug(`${id} is online`);
             addNode.push({
                 id: id,
                 name: name,

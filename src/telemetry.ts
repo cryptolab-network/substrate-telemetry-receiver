@@ -2,6 +2,9 @@ export { Telemetry };
 
 import WebSocket from 'ws';
 import events from 'events';
+import { loggers } from 'winston';
+
+const logger = loggers.get('telemetry');
 
 class Node {
     id: number
@@ -63,13 +66,13 @@ class Telemetry extends events.EventEmitter {
       });
 
       this.connection.on('error', (err) => {
-        console.error(err);
+        logger.error(err);
         this.connection?.terminate();
         this.emit('error');
       });
 
       this.connection.on('close', () => {
-        console.error('websocket connection closed');
+        logger.error('websocket connection closed');
         this.emit('close');
       });
     });
@@ -79,23 +82,23 @@ class Telemetry extends events.EventEmitter {
     const action = message[0];
     switch(action) {
       case 3: // Add Node
-      console.log('added nodes @ ' + new Date().toUTCString());
+      logger.debug('added nodes @ ' + new Date().toUTCString());
       const addNodes = this.__onAddNode(message[1]);
       addNodes.forEach((node)=>{
         this.nodes[node.id] = node;
       });
       if(addNodes.length > 0) {
-        console.log(addNodes);
+        logger.verbose(addNodes);
       }
       break;
       case 4: // Remove Node
-      console.log('removed nodes @ ' + new Date().toUTCString());
-      console.log(message[1]);
+      logger.debug('removed nodes @ ' + new Date().toUTCString());
+      logger.verbose(message[1]);
       this.__onRemoveNode(message[1]);
       break;
       case 19: // Stale Node
-      console.log('stale nodes @ ' + new Date().toUTCString());
-      console.log(message[1]);
+      logger.debug('stale nodes @ ' + new Date().toUTCString());
+      logger.verbose(message[1]);
       break;
     }
     return 2;
@@ -110,12 +113,12 @@ class Telemetry extends events.EventEmitter {
     const address = detail[3];
     const existNode = this.removingNodes[id];
     if(existNode !== undefined) {
-      console.log(`${id} is waiting for removing and is recovered.`);
+      logger.debug(`${id} is waiting for removing and is recovered.`);
       clearTimeout(existNode);
       delete this.removingNodes[id];
       return [];
     } else {
-      console.log(`${id} is online`);
+      logger.debug(`${id} is online`);
       addNode.push({
         id: id,
         name: name,

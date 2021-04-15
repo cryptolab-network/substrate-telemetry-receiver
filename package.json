@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/cryptolab-network/substrate-telemetry-receiver#readme",
   "dependencies": {
+    "winston": "^3.3.3",
     "ws": "^7.4.4"
   },
   "devDependencies": {

@@ -1,13 +1,12 @@
-import { loggers } from "winston";
+import { loggers, transports } from "winston";
 
-const { winston } = require('winston');
 const Telemetry = require('./src/telemetry');
 
 let logLevel = 'info';
 
 loggers.add('telemetry', {
   transports: [
-    new winston.transports.Console(),
+    new transports.Console(),
   ]
 });
 loggers.get('telemetry').configure({

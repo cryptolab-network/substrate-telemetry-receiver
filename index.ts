@@ -4,16 +4,12 @@ const Telemetry = require('./src/telemetry');
 
 let logLevel = 'info';
 
-loggers.add('telemetry', {
-  transports: [
-    new transports.Console(),
-  ]
-});
+loggers.add('telemetry');
 loggers.get('telemetry').configure({
   level: logLevel,
+  transports: [
+    new transports.Console(),
+  ],
 });
 
 module.exports = Telemetry;
-module.exports = function setLogLevel(level: string) {
-  logLevel = level;
-};
